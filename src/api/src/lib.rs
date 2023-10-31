@@ -179,7 +179,7 @@ async fn start() -> std::io::Result<()> {
     let mut listenfd = ListenFd::from_env();
     let mut server = HttpServer::new(move || {
         App::new()
-            .service(Fs::new("/static", "./api/static").show_files_listing())
+            .service(Fs::new("/static", concat!(env!("CARGO_MANIFEST_DIR"), "/static")))
             .app_data(web::Data::new(state.clone()))
             .wrap(middleware::Logger::default()) // enable logger
             .default_service(web::route().to(not_found))
