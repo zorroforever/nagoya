@@ -1,22 +1,17 @@
 [package]
-name = "actix-example-service"
+name = "nagoya_service"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 entity = { path = "../entity" }
 
 [dependencies.sea-orm]
-#path = "../../../" # remove this line in your own project
-version = "0.12.2" # sea-orm version
+version = "0.12.7" # sea-orm version
 features = [
     "debug-print",
     "runtime-async-std-native-tls",
     "sqlx-mysql",
-    # "sqlx-postgres",
-    # "sqlx-sqlite",
 ]
 
 [dev-dependencies]
