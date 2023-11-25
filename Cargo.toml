@@ -14,5 +14,5 @@ edition = "2021"
 #sea-orm = { version = "0.12.2", features = [ "sqlx-mysql", "runtime-tokio-native-tls", "macros","debug-print","with-json","with-chrono","with-time","with-bigdecimal" ] }
 #tokio = { version = "1.32.0", features = ["rt", "macros", "rt-multi-thread"] }
 
-[dependencies.actix-example-api]
+[dependencies.nagoya-api]
 path = "src/api"

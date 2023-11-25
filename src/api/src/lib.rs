@@ -1,4 +1,4 @@
-use actix_example_service::{
+use nagoya_service::{
     sea_orm::{Database, DatabaseConnection},
     Mutation, Query,
 };
