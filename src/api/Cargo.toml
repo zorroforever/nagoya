@@ -1,5 +1,5 @@
 [package]
-name = "actix-example-api"
+name = "nagoya-api"
 version = "0.1.0"
 authors = ["haruka.moe"]
 edition = "2021"
