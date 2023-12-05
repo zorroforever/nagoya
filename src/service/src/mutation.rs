@@ -1,5 +1,7 @@
-use ::entity::{post, post::Entity as Post};
+
+use ::entity::{m_account,post, post::Entity as Post};
 use sea_orm::*;
+
 
 pub struct Mutation;
 
@@ -36,7 +38,19 @@ impl Mutation {
         .update(db)
         .await
     }
+    pub async fn insert_account(
+        db: &DbConn,
+        form_data: m_account::Model,
+    ) -> Result<m_account::ActiveModel, DbErr> {
 
+        m_account::ActiveModel {
+            account_name: Set(form_data.account_name.to_owned()),
+            password: Set(form_data.password.to_owned()),
+            ..Default::default()
+        }
+            .save(db)
+            .await
+    }
     pub async fn delete_post(db: &DbConn, id: i32) -> Result<DeleteResult, DbErr> {
         let post: post::ActiveModel = Post::find_by_id(id)
             .one(db)

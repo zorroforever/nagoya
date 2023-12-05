@@ -1,3 +1,3 @@
 fn main() {
-    actix_example_api::main();
+    nagoya_api::main();
 }

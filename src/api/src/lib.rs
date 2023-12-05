@@ -1,18 +1,19 @@
-use actix_example_service::{
-    sea_orm::{Database, DatabaseConnection},
-    Mutation, Query,
-};
+use std::env;
+
 use actix_files::Files as Fs;
 use actix_web::{
-    error, get, middleware, post, web, App, Error, HttpRequest, HttpResponse, HttpServer, Result,
+    App, error, Error, get, HttpRequest, HttpResponse, HttpServer, middleware, post, Result, web,
 };
+use listenfd::ListenFd;
+use serde::{Deserialize, Serialize};
+use tera::Tera;
 
 use entity::post;
-use listenfd::ListenFd;
 use migration::{Migrator, MigratorTrait};
-use serde::{Deserialize, Serialize};
-use std::env;
-use tera::Tera;
+use nagoya_service::{
+    Mutation,
+    Query, sea_orm::{Database, DatabaseConnection},
+};
 
 const DEFAULT_POSTS_PER_PAGE: u64 = 5;
 
@@ -57,6 +58,16 @@ async fn list(req: HttpRequest, data: web::Data<AppState>) -> Result<HttpRespons
 
     let body = template
         .render("index.html.tera", &ctx)
+        .map_err(|_| error::ErrorInternalServerError("Template error"))?;
+    Ok(HttpResponse::Ok().content_type("text/html").body(body))
+}
+
+#[get("/register")]
+async fn register(data: web::Data<AppState>) -> Result<HttpResponse, Error> {
+    let template = &data.templates;
+    let ctx = tera::Context::new();
+    let body = template
+        .render("register.html.tera", &ctx)
         .map_err(|_| error::ErrorInternalServerError("Template error"))?;
     Ok(HttpResponse::Ok().content_type("text/html").body(body))
 }
@@ -122,6 +133,25 @@ async fn update(
     Mutation::update_post_by_id(conn, id, form)
         .await
         .expect("could not edit post");
+
+    Ok(HttpResponse::Found()
+        .append_header(("location", "/"))
+        .finish())
+}
+
+#[post("/doReg")]
+async fn do_reg(
+    data: web::Data<AppState>,
+    account_form: web::Form<entity::api::RegModel>,
+) -> Result<HttpResponse, Error> {
+    let conn = &data.conn;
+    // let form = account_form.into_inner();
+    let mut source = entity::m_account::Model::default();
+    source.account_name = account_form.account_name.clone();
+    source.password = account_form.password.clone();
+    Mutation::insert_account(conn, source)
+        .await
+        .expect("could not register!");
 
     Ok(HttpResponse::Found()
         .append_header(("location", "/"))
@@ -199,6 +229,8 @@ async fn start() -> std::io::Result<()> {
 
 fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(list);
+    cfg.service(register);
+    cfg.service(do_reg);
     cfg.service(new);
     cfg.service(create);
     cfg.service(edit);
