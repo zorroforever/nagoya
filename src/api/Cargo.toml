@@ -1,7 +1,7 @@
 [package]
-name = "nagoya-api"
+name = "actix-example-api"
 version = "0.1.0"
-authors = ["haruka moe"]
+authors = ["haruka.moe"]
 edition = "2021"
 publish = false
 
@@ -20,5 +20,4 @@ tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 nagoya-service = { path = "../service" }
 entity = { path = "../entity" }
 migration = { path = "../migration" }
-
 
