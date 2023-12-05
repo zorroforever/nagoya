@@ -1,4 +1,4 @@
-# nagoya
+# nagoya system 名古屋システム
 ## RUST ウェブ練習
 **练习选择了rust 的web框架actix-web**  
 
