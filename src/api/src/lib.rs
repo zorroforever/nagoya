@@ -5,15 +5,15 @@ use actix_web::{
     App, error, Error, get, HttpRequest, HttpResponse, HttpServer, middleware, post, Result, web,
 };
 use listenfd::ListenFd;
-use serde::{Deserialize, Serialize};
-use tera::Tera;
-
-use entity::post;
-use migration::{Migrator, MigratorTrait};
 use nagoya_service::{
     Mutation,
     Query, sea_orm::{Database, DatabaseConnection},
 };
+use serde::{Deserialize, Serialize};
+use tera::Tera;
+use entity::posts;
+
+use migration::{Migrator, MigratorTrait};
 
 const DEFAULT_POSTS_PER_PAGE: u64 = 5;
 
@@ -85,7 +85,7 @@ async fn new(data: web::Data<AppState>) -> Result<HttpResponse, Error> {
 #[post("/")]
 async fn create(
     data: web::Data<AppState>,
-    post_form: web::Form<post::Model>,
+    post_form: web::Form<posts::Model>,
 ) -> Result<HttpResponse, Error> {
     let conn = &data.conn;
 
@@ -106,7 +106,7 @@ async fn edit(data: web::Data<AppState>, id: web::Path<i32>) -> Result<HttpRespo
     let template = &data.templates;
     let id = id.into_inner();
 
-    let post: post::Model = Query::find_post_by_id(conn, id)
+    let post: posts::Model = Query::find_post_by_id(conn, id)
         .await
         .expect("could not find post")
         .unwrap_or_else(|| panic!("could not find post with id {id}"));
@@ -124,7 +124,7 @@ async fn edit(data: web::Data<AppState>, id: web::Path<i32>) -> Result<HttpRespo
 async fn update(
     data: web::Data<AppState>,
     id: web::Path<i32>,
-    post_form: web::Form<post::Model>,
+    post_form: web::Form<posts::Model>,
 ) -> Result<HttpResponse, Error> {
     let conn = &data.conn;
     let form = post_form.into_inner();

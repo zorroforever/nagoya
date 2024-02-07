@@ -18,8 +18,10 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
+                    .col(ColumnDef::new(Posts::P_Type).string().not_null())
                     .col(ColumnDef::new(Posts::Title).string().not_null())
                     .col(ColumnDef::new(Posts::Text).string().not_null())
+                    .col(ColumnDef::new(Posts::ProcessDate).integer().not_null())
                     .to_owned(),
             )
             .await
@@ -36,6 +38,8 @@ impl MigrationTrait for Migration {
 enum Posts {
     Table,
     Id,
+    P_Type,
     Title,
     Text,
+    ProcessDate,
 }

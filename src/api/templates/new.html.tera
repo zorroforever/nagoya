@@ -21,7 +21,23 @@
         autofocus
         class="u-full-width"
       />
+        <input
+          type="text"
+          placeholder="enter amount ex.0.0"
+          name="amount"
+          id="amount"
+          value=""
+          autofocus
+          class="u-full-width"
+        />
+      <label for="p_type">select type：</label>
+      <select id="p_type" name="p_type">
+        <option value="in">in</option>
+        <option value="out">out</option>
+      </select>
     </div>
+
+    </form>
     <div class="twelve columns">
       <div class="two columns">
         <a href="/">

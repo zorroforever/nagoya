@@ -13,14 +13,18 @@
         <tr>
           <th>ID</th>
           <th>Title</th>
+          <th>Type</th>
           <th>Text</th>
+          <th>ProcessDate</th>
         </tr>
       </thead>
       {% for post in posts %}
       <tr class="post" onclick="window.location='/{{ post.id }}';">
         <td>{{ post.id }}</td>
         <td>{{ post.title }}</td>
+        <td>{{ post.p_type }}</td>
         <td>{{ post.text }}</td>
+        <td>{{ post.process_date }}</td>
       </tr>
       {% endfor %}
     </tbody>

@@ -1,22 +1,21 @@
-use ::entity::{post, post::Entity as Post};
+use ::entity::{posts, posts::Entity as Post};
 use sea_orm::*;
 
 pub struct Query;
 
 impl Query {
-    pub async fn find_post_by_id(db: &DbConn, id: i32) -> Result<Option<post::Model>, DbErr> {
+    pub async fn find_post_by_id(db: &DbConn, id: i32) -> Result<Option<posts::Model>, DbErr> {
         Post::find_by_id(id).one(db).await
     }
 
-    /// If ok, returns (post models, num pages).
     pub async fn find_posts_in_page(
         db: &DbConn,
         page: u64,
         posts_per_page: u64,
-    ) -> Result<(Vec<post::Model>, u64), DbErr> {
+    ) -> Result<(Vec<posts::Model>, u64), DbErr> {
         // Setup paginator
         let paginator = Post::find()
-            .order_by_asc(post::Column::Id)
+            .order_by_asc(posts::Column::Id)
             .paginate(db, posts_per_page);
         let num_pages = paginator.num_pages().await?;
 
